@@ -4,16 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.time.chrono.ThaiBuddhistChronology;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * A simple weighted, directed, graph.
@@ -882,6 +883,13 @@ public class Graph {
     this.unmark(this.vertexNumber(vertex));
   } // unmark(String)
 
+
+  public void reachableFrom(PrintWriter pen, int vertex) {
+    for(Edge edge : vertices[vertex] ) {
+      pen.println(this.vertexNames[edge.target()]);
+    } // for
+  }
+
   // +-----------+---------------------------------------------------
   // | Utilities |
   // +-----------+
@@ -975,5 +983,39 @@ public class Graph {
     } // if
     return num;
   } // safeVertexNumber(String)
+
+
+  public Edge[] shortestPath(int source, int sink) { 
+    int[] nodeDistances = new int[this.numVertices];
+    int[] prevNodes = new int[this.numVertices];
+
+    for(int i = 0; i < this.numVertices; ++i) { 
+      nodeDistances[i] = Integer.MAX_VALUE;
+    }
+    nodeDistances[source] = 0;
+    int nearest = source;
+    while(!isMarked(sink)) {  //and there exists an unmarked node with finite distance from SOURCE
+      for(int i = 0; i < this.numVertices; ++i) { 
+        if(!isMarked(i) && nodeDistances[i] < nodeDistances[nearest]) { 
+          nearest = i;
+        }
+      }
+
+      mark(nearest);
+
+      for(Edge edge : this.vertices[nearest]) { 
+        int newDistance = edge.weight() + nodeDistances[nearest];
+        if(nodeDistances[edge.target()] > newDistance) { 
+          nodeDistances[edge.target()] = newDistance;
+          prevNodes[edge.target()] = nearest;
+        }
+      }
+    }
+
+    
+
+
+    return null;
+  }
 
 } // class Graph
