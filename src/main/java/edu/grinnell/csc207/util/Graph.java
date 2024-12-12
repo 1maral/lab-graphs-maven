@@ -985,24 +985,27 @@ public class Graph {
   } // safeVertexNumber(String)
 
 
-  public Edge[] shortestPath(int source, int sink) { 
+  public List<Integer> shortestPath(int source, int sink) { 
     int[] nodeDistances = new int[this.numVertices];
     int[] prevNodes = new int[this.numVertices];
 
     for(int i = 0; i < this.numVertices; ++i) { 
       nodeDistances[i] = Integer.MAX_VALUE;
+      unmark(i);
     }
     nodeDistances[source] = 0;
     int nearest = source;
+    int nearestDistance = Integer.MAX_VALUE;
     while(!isMarked(sink)) {  //and there exists an unmarked node with finite distance from SOURCE
+      nearestDistance = Integer.MAX_VALUE;
       for(int i = 0; i < this.numVertices; ++i) { 
-        if(!isMarked(i) && nodeDistances[i] < nodeDistances[nearest]) { 
+        if(!isMarked(i) && nodeDistances[i] < nearestDistance) { 
           nearest = i;
+          nearestDistance = nodeDistances[i];
         }
       }
 
       mark(nearest);
-
       for(Edge edge : this.vertices[nearest]) { 
         int newDistance = edge.weight() + nodeDistances[nearest];
         if(nodeDistances[edge.target()] > newDistance) { 
@@ -1010,12 +1013,20 @@ public class Graph {
           prevNodes[edge.target()] = nearest;
         }
       }
+
     }
 
-    
+    List<Integer> path = new ArrayList<>();
+    int prev = sink;
 
+    while(prev != source) { 
+      path.add(prev);
+      prev = prevNodes[prev];
+    }
 
-    return null;
+    path.add(source);
+
+    return path;
   }
 
 } // class Graph

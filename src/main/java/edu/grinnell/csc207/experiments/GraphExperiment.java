@@ -1,6 +1,7 @@
 package edu.grinnell.csc207.experiments;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 import edu.grinnell.csc207.util.Graph;
 
@@ -84,6 +85,12 @@ public class GraphExperiment {
     h.addEdge("c", "a", 1);
     h.reachableFrom(pen, 0) ;
     h.dumpWithNames(pen);
+
+    List<Integer> path = h.shortestPath(0, 2);
+    for(Integer p : path) { 
+      pen.println(p);
+    }
+    pen.println(path.size());
 
   } // main(String[])
 
