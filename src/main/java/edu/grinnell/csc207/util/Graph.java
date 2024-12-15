@@ -1014,7 +1014,8 @@ public class Graph {
     nodeDistances[source] = 0;
     int nearest = source;
     int nearestDistance = Integer.MAX_VALUE;
-    while(!isMarked(sink)) {  //and there exists an unmarked node with finite distance from SOURCE
+    int numMarked = 0;
+    while(!isMarked(sink) && numMarked <= this.numVertices ) {  //and there exists an unmarked node with finite distance from SOURCE
       nearestDistance = Integer.MAX_VALUE;
       for(int i = 0; i < this.numVertices; ++i) { 
         if(!isMarked(i) && nodeDistances[i] < nearestDistance) { 
@@ -1024,6 +1025,8 @@ public class Graph {
       }
 
       mark(nearest);
+      numMarked++;
+
       for(Edge edge : this.vertices[nearest]) { 
         int newDistance = edge.weight() + nodeDistances[nearest];
         if(nodeDistances[edge.target()] > newDistance) { 
