@@ -884,10 +884,28 @@ public class Graph {
   } // unmark(String)
 
 
-  public void reachableFrom(PrintWriter pen, int vertex) {
+  /** 
+   * Unmark all the vertices.
+   */
+  void unmarkAll() {
+    for(int i = 0; i < this.vertices.length; ++i) { 
+      unmark(i);
+    }
+  }
+
+  public void reachableFromHelper(PrintWriter pen, int vertex) { 
+    mark(vertex);
     for(Edge edge : vertices[vertex] ) {
-      pen.println(this.vertexNames[edge.target()]);
+      if(!isMarked(edge.target())) { 
+        pen.println(this.vertexNames[edge.target()]);
+        reachableFromHelper(pen, edge.target());
+      }
     } // for
+  }
+
+  public void reachableFrom(PrintWriter pen, int vertex) {
+    unmarkAll();
+    reachableFromHelper(pen, vertex);
   }
 
   // +-----------+---------------------------------------------------

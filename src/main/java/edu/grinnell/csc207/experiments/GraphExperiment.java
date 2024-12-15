@@ -92,6 +92,18 @@ public class GraphExperiment {
     }
     pen.println(path.size());
 
+    pen.println("----------------");
+    h.addVertex("d");
+    h.addVertex("e");
+    h.addVertex("f");
+    h.addEdge("a", "d", 1);
+    h.addEdge("d", "e", 1);
+    h.addEdge("e", "f", 1);
+    pen.println("Reachable from a");
+    h.reachableFrom(pen, 0);
+    pen.println("Reachable from b");
+    h.reachableFrom(pen, 1);
+
   } // main(String[])
 
 } // class GraphExperiment
